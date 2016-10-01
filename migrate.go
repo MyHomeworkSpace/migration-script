@@ -106,6 +106,43 @@ func main() {
 	}
     log.Println("Migrated users!")
 
-    // classes and homework
+    // classes
+    log.Printf("Migrating table 'planner_sections' to 'classes'...\n")
+	classesCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`classes` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` text, `teacher` text, `userId` int(11) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1")
+	if err != nil {
+    	log.Fatal(err)
+    }
+    _, err = classesCreateStmt.Exec()
+    if err != nil {
+    	log.Fatal(err)
+    }
+	classesInsertStmt, err := DB.Prepare("INSERT `" + config.NewDB + "`.classes SELECT sectionGid AS `id`, `name`, \"\" AS `teacher`, userId FROM " + config.OldDB + ".planner_sections")
+    if err != nil {
+    	log.Fatal(err)
+    }
+    _, err = classesInsertStmt.Exec()
+    if err != nil {
+    	log.Fatal(err)
+    }
+    log.Printf("Migrated classes!\n")
 
+	// homework
+    log.Printf("Migrating table 'planner_events' to 'homework'...\n")
+	homeworkCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`homework` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` text, `due` date DEFAULT NULL, `desc` text, `complete` varchar(45) DEFAULT NULL, `classId` int(11) DEFAULT NULL, `userId` int(11) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1")
+	if err != nil {
+    	log.Fatal(err)
+    }
+    _, err = homeworkCreateStmt.Exec()
+    if err != nil {
+    	log.Fatal(err)
+    }
+	homeworkInsertStmt, err := DB.Prepare("INSERT `" + config.NewDB + "`.homework SELECT eventId AS `id`, `text` AS `name`, `date` AS `due`, \"\" AS `desc`, `done` AS `complete`, `" + config.OldDB + "`.planner_sections.sectionGid AS `classId`, `" + config.OldDB + "`.planner_events.`userId` FROM `" + config.OldDB + "`.planner_events INNER JOIN `" + config.OldDB + "`.planner_sections ON ((`" + config.OldDB + "`.planner_sections.userId = `" + config.OldDB + "`.planner_events.userId) AND (`" + config.OldDB + "`.planner_sections.sectionIndex = `" + config.OldDB + "`.planner_events.sectionIndex))")
+    if err != nil {
+    	log.Fatal(err)
+    }
+    _, err = homeworkInsertStmt.Exec()
+    if err != nil {
+    	log.Fatal(err)
+    }
+    log.Printf("Migrated homework!\n")
 }
