@@ -7,15 +7,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Column struct {
-    field string
-    colType string
-    nullable string
-    key string
-    defaultVal interface{}
-    extra string
-}
-
 var DB *sql.DB
 
 func InitDatabase() {
@@ -113,7 +104,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
     log.Println("Migrated users!")
 
     // classes and homework
