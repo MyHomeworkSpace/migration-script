@@ -136,7 +136,7 @@ func main() {
     if err != nil {
     	log.Fatal(err)
     }
-	homeworkInsertStmt, err := DB.Prepare("INSERT `" + config.NewDB + "`.homework SELECT eventId AS `id`, `text` AS `name`, `date` AS `due`, \"\" AS `desc`, `done` AS `complete`, `" + config.OldDB + "`.planner_sections.sectionGid AS `classId`, `" + config.OldDB + "`.planner_events.`userId` FROM `" + config.OldDB + "`.planner_events INNER JOIN `" + config.OldDB + "`.planner_sections ON ((`" + config.OldDB + "`.planner_sections.userId = `" + config.OldDB + "`.planner_events.userId) AND (`" + config.OldDB + "`.planner_sections.sectionIndex = `" + config.OldDB + "`.planner_events.sectionIndex))")
+	homeworkInsertStmt, err := DB.Prepare("INSERT `" + config.NewDB + "`.homework SELECT eventId AS `id`, `text` AS `name`, `date` AS `due`, \"\" AS `desc`, `done` AS `complete`, `" + config.OldDB + "`.planner_sections.sectionGid AS `classId`, `" + config.OldDB + "`.planner_events.`userId` FROM `" + config.OldDB + "`.planner_events INNER JOIN `" + config.OldDB + "`.planner_sections ON ((`" + config.OldDB + "`.planner_sections.userId = `" + config.OldDB + "`.planner_events.userId) AND (`" + config.OldDB + "`.planner_sections.sectionIndex = `" + config.OldDB + "`.planner_events.sectionIndex)) WHERE `text` != \"\" AND `text` != \"none\"")
     if err != nil {
     	log.Fatal(err)
     }
@@ -145,4 +145,16 @@ func main() {
     	log.Fatal(err)
     }
     log.Printf("Migrated homework!\n")
+
+	// sessions
+	log.Printf("Creating table 'sessions'...\n")
+	sessionsCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`sessions` (`id` varchar(255) NOT NULL, `userId` int(11) DEFAULT NULL, `username` text, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
+	if err != nil {
+    	log.Fatal(err)
+    }
+    _, err = sessionsCreateStmt.Exec()
+    if err != nil {
+    	log.Fatal(err)
+    }
+    log.Printf("Created sessions!\n")
 }
