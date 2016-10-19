@@ -146,6 +146,18 @@ func main() {
     }
     log.Printf("Migrated homework!\n")
 
+	// prefs
+	log.Printf("Creating table 'prefs'...\n")
+	prefsCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`prefs` (`id` varchar(255) NOT NULL, `userId` int(11) DEFAULT NULL, `key` TEXT, `value` TEXT, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
+	if err != nil {
+    	log.Fatal(err)
+    }
+    _, err = prefsCreateStmt.Exec()
+    if err != nil {
+    	log.Fatal(err)
+    }
+    log.Printf("Created prefs!\n")
+
 	// sessions
 	log.Printf("Creating table 'sessions'...\n")
 	sessionsCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`sessions` (`id` varchar(255) NOT NULL, `userId` int(11) DEFAULT NULL, `username` text, `timestamp` TIMESTAMP, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
