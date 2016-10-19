@@ -148,7 +148,7 @@ func main() {
 
 	// sessions
 	log.Printf("Creating table 'sessions'...\n")
-	sessionsCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`sessions` (`id` varchar(255) NOT NULL, `userId` int(11) DEFAULT NULL, `username` text, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
+	sessionsCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`sessions` (`id` varchar(255) NOT NULL, `userId` int(11) DEFAULT NULL, `username` text, `timestamp` TIMESTAMP, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
 	if err != nil {
     	log.Fatal(err)
     }
