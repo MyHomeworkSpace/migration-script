@@ -148,7 +148,7 @@ func main() {
 
 	// prefs
 	log.Printf("Creating table 'prefs'...\n")
-	prefsCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`prefs` (`id` varchar(255) NOT NULL, `userId` int(11) DEFAULT NULL, `key` TEXT, `value` TEXT, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
+	prefsCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`prefs` (`id` int(11) NOT NULL AUTO_INCREMENT, `userId` int(11) DEFAULT NULL, `key` TEXT, `value` TEXT, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
 	if err != nil {
     	log.Fatal(err)
     }
