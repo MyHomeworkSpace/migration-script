@@ -136,7 +136,7 @@ func main() {
     if err != nil {
     	log.Fatal(err)
     }
-	homeworkInsertStmt, err := DB.Prepare("INSERT `" + config.NewDB + "`.homework SELECT eventId AS `id`, `text` AS `name`, `date` AS `due`, \"\" AS `desc`, `done` AS `complete`, `" + config.OldDB + "`.planner_sections.sectionGid AS `classId`, `" + config.OldDB + "`.planner_events.`userId` FROM `" + config.OldDB + "`.planner_events INNER JOIN `" + config.OldDB + "`.planner_sections ON ((`" + config.OldDB + "`.planner_sections.userId = `" + config.OldDB + "`.planner_events.userId) AND (`" + config.OldDB + "`.planner_sections.sectionIndex = `" + config.OldDB + "`.planner_events.sectionIndex)) WHERE `text` != \"\" AND `text` != \"none\" AND `" + config.OldDB + "`.planner_events.userId > 0")
+	homeworkInsertStmt, err := DB.Prepare("INSERT `" + config.NewDB + "`.homework SELECT eventId AS `id`, `text` AS `name`, `date` AS `due`, \"\" AS `desc`, `done` AS `complete`, `" + config.OldDB + "`.planner_sections.sectionGid AS `classId`, `" + config.OldDB + "`.planner_events.`userId` FROM `" + config.OldDB + "`.planner_events INNER JOIN `" + config.OldDB + "`.planner_sections ON ((`" + config.OldDB + "`.planner_sections.userId = `" + config.OldDB + "`.planner_events.userId) AND (`" + config.OldDB + "`.planner_sections.sectionIndex = `" + config.OldDB + "`.planner_events.sectionIndex)) WHERE `text` != \"\" AND `text` != \"none\" AND `text` != \"nohw\" AND `" + config.OldDB + "`.planner_events.userId > 0")
     if err != nil {
     	log.Fatal(err)
     }
