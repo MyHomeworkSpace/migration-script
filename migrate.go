@@ -128,7 +128,7 @@ func main() {
 
 	// homework
     log.Printf("Migrating table 'planner_events' to 'homework'...\n")
-	homeworkCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`homework` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` text, `due` date DEFAULT NULL, `desc` text, `complete` varchar(45) DEFAULT NULL, `classId` int(11) DEFAULT NULL, `userId` int(11) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1")
+	homeworkCreateStmt, err := DB.Prepare("CREATE TABLE `" + config.NewDB + "`.`homework` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` text, `due` date DEFAULT NULL, `desc` text, `complete` varchar(45) DEFAULT NULL, `classId` int(11) DEFAULT NULL, `userId` int(11) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
 	if err != nil {
     	log.Fatal(err)
     }
@@ -136,7 +136,7 @@ func main() {
     if err != nil {
     	log.Fatal(err)
     }
-	homeworkInsertStmt, err := DB.Prepare("INSERT `" + config.NewDB + "`.homework SELECT eventId AS `id`, `text` AS `name`, `date` AS `due`, \"\" AS `desc`, `done` AS `complete`, `" + config.OldDB + "`.planner_sections.sectionGid AS `classId`, `" + config.OldDB + "`.planner_events.`userId` FROM `" + config.OldDB + "`.planner_events INNER JOIN `" + config.OldDB + "`.planner_sections ON ((`" + config.OldDB + "`.planner_sections.userId = `" + config.OldDB + "`.planner_events.userId) AND (`" + config.OldDB + "`.planner_sections.sectionIndex = `" + config.OldDB + "`.planner_events.sectionIndex)) WHERE `text` != \"\" AND `text` != \"none\"")
+	homeworkInsertStmt, err := DB.Prepare("INSERT `" + config.NewDB + "`.homework SELECT eventId AS `id`, `text` AS `name`, `date` AS `due`, \"\" AS `desc`, `done` AS `complete`, `" + config.OldDB + "`.planner_sections.sectionGid AS `classId`, `" + config.OldDB + "`.planner_events.`userId` FROM `" + config.OldDB + "`.planner_events INNER JOIN `" + config.OldDB + "`.planner_sections ON ((`" + config.OldDB + "`.planner_sections.userId = `" + config.OldDB + "`.planner_events.userId) AND (`" + config.OldDB + "`.planner_sections.sectionIndex = `" + config.OldDB + "`.planner_events.sectionIndex)) WHERE `text` != \"\" AND `text` != \"none\" AND `" + config.OldDB + "`.planner_events.userId > 0")
     if err != nil {
     	log.Fatal(err)
     }
